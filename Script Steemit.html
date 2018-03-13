@@ -1,0 +1,142 @@
+<html>
+    <head>
+	<meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/>
+<link rel='stylesheet' type='text/css' href='plantilla.css' media='screen' />
+        <script src="https://cdn.steemjs.com/lib/latest/steem.min.js"></script>
+        <script>
+		
+		function redondeo(numero)
+{
+var resultado = Math.round(numero*1000)/1000;
+return resultado;
+}
+		
+		function calRep(raw)
+		{
+		if(raw<1000000000)
+		  return 25;
+		 else
+		return redondeo(9*Math.log10(raw)-56);
+		}
+		
+		function compareRep(a, b) {
+		
+		var atributo='reputation';
+			 //atributo='vesting_shares';
+  if (calRep(a[atributo])<calRep(b[atributo]))
+    return 1;
+	else
+	return -1;
+} 
+		
+		
+		
+            steem.api.getAccounts(['joseleogon','isisfemale','eliaschess333','eleonardo','ydavgonzalez','eniolw','vjap55','isgledysduarte','jorfrani','sawko'], function(err, response){
+			var tasa=2043.29;
+			var SP;
+			var DEL;
+			var aux;
+			
+			var RAW;
+                 console.log(err, response);
+			
+			
+				response.sort(compareRep);
+					
+					var creacion,tiempo; 
+                 var fecha=Date.now();
+	
+					
+			var RAWMAYOR = response[0]['reputation'];
+			document.getElementById("numUsers").innerHTML =response.length;
+			
+				 for(i=0;i<response.length;i++)
+				 {
+                document.getElementById("usuario"+i).innerHTML ="<a href=\'https://steemit.com/@"+response[i]['name']+"\'>@"+response[i]['name']+"</a>";
+                document.getElementById("steem"+i).innerHTML = response[i]['balance'];;
+				RAW = response[i]['reputation'];
+				DIFRAW = redondeo((RAWMAYOR-RAW)/1000000000);
+			 document.getElementById("reputacion"+i).innerHTML = calRep(RAW);
+			 			 document.getElementById("raw"+i).innerHTML = redondeo(RAW/1000000000)+" TRS";
+				document.getElementById("sbd"+i).innerHTML = response[i]['sbd_balance'];
+					document.getElementById("dif"+i).innerHTML = DIFRAW+ " Tera";
+		        SP = redondeo(parseFloat(response[i]['vesting_shares'])/tasa);
+			    document.getElementById("sp"+i).innerHTML = SP;
+			    DEL = redondeo(parseFloat(response[i]['received_vesting_shares'])/tasa);
+         	document.getElementById("del"+i).innerHTML =DEL;
+				document.getElementById("valorV"+i).innerHTML =redondeo(SP+DEL);
+				//document.getElementById("creada"+i).innerHTML =response[i]['created'];
+				creacion=new Date(response[i]['created']).getTime();
+			    tiempo=redondeo((fecha-creacion)/86400000);
+				document.getElementById("creada"+i).innerHTML =tiempo;
+			}
+	});
+        </script>
+    </head>
+    <body>   
+<form name="formulario" id="formulario">	
+		<br/>
+		<input name='numUsers'  id='numUsers' type='hidden' value='0'></input>
+		<h2 align="center">Explorando Datos en Steemit</h2>
+		   <br/>
+		   	   <hr/>
+			   <div class="text-center">
+		   <table border=1 align="center">
+		   <tr>
+		   <th>N&deg;</th>
+		   <th>Usuario</th>
+		  	<th>Rep.</th>
+			<th>RAW Score</th>
+			<th>Dif. RAW</th>
+	       <th>Steem</th>
+		   <th>SBD</th>
+	       <th>SP</th>
+		   <th>Delegacion</th>
+		   <th>SP efectivo</th>
+		   <th>Creada</th>
+		   </tr>
+		   
+		   
+	<script>	
+
+	
+		 for(i=0;i<10;i++)
+				 {
+	document.write("<tr><td>"+(i+1)+"&deg;</td><td><span id=\'usuario"+i+"\'/></td><td><span id=\'reputacion"+i+"\'/></td><td><span id=\'raw"+i+"\'/></td><td><span id=\'dif"+i+"\'/></td><td><span id=\'steem"+i+"\'/></td><td><span id=\'sbd"+i+"\'/></td><td><span id=\'sp"+i+"\'/></td> <td><span id=\'del"+i+"\'/></td><td><span id=\'valorV"+i+"\'/></td><td><span id=\'creada"+i+"\'/></td></tr>");
+	  }
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  </script>
+	
+	
+	
+	
+	
+	
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+		
+		   
+		   <table>
+		   
+		   </div>
+		   </form>
+   </body>
+</html>
